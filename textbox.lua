@@ -40,12 +40,14 @@ UiPush()
 		UiText(labelString)
 	UiPop()
 	
-	if textboxClass_checkMouseInRect(me) and not me.inputActive then
-		UiColor(1,1,0)
-	elseif me.inputActive then
-		UiColor(0,1,0)
-	else
-		UiColor(1,1,1)
+	if not me.disabled then
+		if textboxClass_checkMouseInRect(me) and not me.inputActive then
+			UiColor(1,1,0)
+		elseif me.inputActive then
+			UiColor(0,1,0)
+		else
+			UiColor(1,1,1)
+		end
 	end
 	
 	UiPush()
@@ -59,8 +61,17 @@ UiPush()
 			tempVal = " "
 		end
 		
+		if me.disabled then
+			UiButtonImageBox("ui/common/box-outline-6.png", 6, 6, 0.25, 0.25, 0.25, 1)
+			UiButtonPressColor(1, 1, 1)
+			UiButtonHoverColor(1, 1, 1)
+			UiButtonPressDist(0)
+		end
+		
 		if UiTextButton(tempVal, me.width, me.height) then
-			me.inputActive = not me.inputActive
+			if not me.disabled then
+				me.inputActive = not me.inputActive
+			end
 		end
 	UiPop()
 UiPop()
@@ -120,11 +131,6 @@ function textboxClass_checkMouseInRect(me)
 end
 
 function textboxClass_setActiveState(me, newState)
-	if me.disabled then
-		me.inputActive = false
-		return
-	end
-
 	me.inputActive = newState
 	if not me.inputActive then
 		if me.numbersOnly then
