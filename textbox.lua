@@ -157,6 +157,16 @@ function textboxClass_setActiveState(me, newState)
 	end
 end
 
+function textboxClass_anyInputActive()
+	for i = 1, #textboxClass.textboxes do
+		local textBox = textboxClass.textboxes[i]
+		
+		if textBox.inputActive then
+			return true, i
+		end
+	end
+end
+
 function getMaxTextSize(text, fontSize, maxSize, minFontSize)
 	minFontSize = minFontSize or 1
 	UiPush()
