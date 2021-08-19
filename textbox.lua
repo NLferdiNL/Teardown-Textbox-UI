@@ -114,7 +114,11 @@ end
 			if not me.numbersOnly then
 				for j = 1, #textboxClass.inputLetters do
 					if InputPressed(textboxClass.inputLetters[j]) then
-						me.value = me.value .. textboxClass.inputLetters[j]
+						local newLetter = textboxClass.inputLetters[j]
+						if InputDown("shift") then
+							newLetter = newLetter:upper()
+						end
+						me.value = me.value .. newLetter
 					end
 				end
 			end
