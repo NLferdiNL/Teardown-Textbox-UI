@@ -11,9 +11,10 @@ local textboxClass = {
 	numberMax = 1,
 	inputActive = false,
 	lastInputActive = false,
+	onInputFinished = nil,
 }
 
-local inputNumbers = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."}
+local inputNumbers = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "-"}
 local inputLetters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "space"}
 
 local textboxes = {}
@@ -206,9 +207,13 @@ function textboxClass_checkMouseInRect(me)
 	if me == nil then
 		return false
 	end
-
-
-	return UiIsMouseInRect(me.width, me.height)
+	
+	UiPush()
+		UiAlign("center middle")
+		local isInsideMe = UiIsMouseInRect(me.width, me.height)
+	UiPop()
+	
+	return isInsideMe
 end
 
 function textboxClass_setActiveState(me, newState)
@@ -234,6 +239,10 @@ function textboxClass_setActiveState(me, newState)
 					me.value = me.numberMax .. ""
 				end
 			end
+		end
+		
+		if me.lastInputActive and me.onInputFinished ~= nil then
+			me.onInputFinished(me.value)
 		end
 	end
 end
