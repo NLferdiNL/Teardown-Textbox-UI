@@ -232,7 +232,7 @@ function textboxClass_setActiveState(me, newState)
 				local tempVal = tonumber(me.value)
 				
 				if tempVal == nil then
-					me.value = me.numberMin
+					me.value = me.numberMin .. ""
 				elseif tempVal < me.numberMin then
 					me.value = me.numberMin .. ""
 				elseif tempVal > me.numberMax then
