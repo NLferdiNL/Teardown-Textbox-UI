@@ -50,8 +50,8 @@ function textboxClass_render(me)
 		UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
 		
 		UiPush()
-			UiAlign("center right")
-			UiTranslate(-nameWidth / 2 - me.width / 2, me.height / 5)
+			UiAlign("right")
+			UiTranslate(0, me.height / 5)
 			UiText(labelString)
 		UiPop()
 		
