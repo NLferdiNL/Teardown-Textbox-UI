@@ -88,11 +88,11 @@ function textboxClass_render(me)
 		UiPop()
 		
 		UiPush()
-		if textboxClass_checkMouseInRect(me) and (me.description ~= nil and me.description ~= "") and not me.inputActive then
-			me.mouseOver = true
-		else
-			me.mouseOver = false
-		end
+			if textboxClass_checkMouseInRect(me) and (me.description ~= nil and me.description ~= "") and not me.inputActive then
+				me.mouseOver = true
+			else
+				me.mouseOver = false
+			end
 		UiPop()
 	UiPop()
 end
@@ -209,7 +209,7 @@ function textboxClass_checkMouseInRect(me)
 	end
 	
 	UiPush()
-		UiAlign("center middle")
+		UiAlign("left middle")
 		local isInsideMe = UiIsMouseInRect(me.width, me.height)
 	UiPop()
 	
