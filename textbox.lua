@@ -43,6 +43,7 @@ function textboxClass_render(me)
 
 	UiPush()
 		UiFont("regular.ttf", 26)
+		UiAlign("left middle")
 		
 		local labelString = me.name
 		local nameWidth, nameHeight = UiGetTextSize(labelString)
@@ -50,8 +51,7 @@ function textboxClass_render(me)
 		UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
 		
 		UiPush()
-			UiAlign("right")
-			UiTranslate(0, me.height / 5)
+			UiAlign("right middle")
 			UiText(labelString)
 		UiPop()
 		
