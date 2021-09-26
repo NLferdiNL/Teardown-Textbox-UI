@@ -21,6 +21,9 @@ local textboxes = {}
 
 local descriptionBoxMargin = 20
 
+local textBoxBg = "ui/common/box-outline-6.png"
+local descBoxBg = "ui/hud/infobox.png"
+
 function textboxClass_tick()
 	for i = 1, #textboxes do
 		local textBox = textboxes[i]
@@ -29,7 +32,7 @@ function textboxClass_tick()
 end
 
 function disableButtonStyle()
-	UiButtonImageBox("ui/common/box-outline-6.png", 6, 6, 0.25, 0.25, 0.25, 1)
+	UiButtonImageBox(textBoxBg, 6, 6, 0.25, 0.25, 0.25, 1)
 	UiButtonPressColor(1, 1, 1)
 	UiButtonHoverColor(1, 1, 1)
 	UiButtonPressDist(0)
@@ -48,7 +51,7 @@ function textboxClass_render(me)
 		local labelString = me.name
 		local nameWidth, nameHeight = UiGetTextSize(labelString)
 		
-		UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+		UiButtonImageBox(textBoxBg, 6, 6)
 		
 		UiPush()
 			UiAlign("right middle")
@@ -123,7 +126,7 @@ function textboxClass_drawDescriptions()
 				end
 				
 				UiColor(1, 1, 1, 0.75)
-				UiImageBox("ui/hud/infobox.png", textWidth + descriptionBoxMargin, textHeight + descriptionBoxMargin, 10, 10)
+				UiImageBox(descBoxBg, textWidth + descriptionBoxMargin, textHeight + descriptionBoxMargin, 10, 10)
 				
 				UiTranslate(textOffsetX, 10)
 				
