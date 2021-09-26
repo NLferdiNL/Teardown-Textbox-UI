@@ -19,10 +19,32 @@ local inputLetters = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"
 
 local textboxes = {}
 
+-- STYLE CONFIG
+
+local font = "regular.ttf"
+
 local descriptionBoxMargin = 20
+
+local defaultTextSize = 26
+local defaultDescriptionTextSize = 26
 
 local textBoxBg = "ui/common/box-outline-6.png"
 local descBoxBg = "ui/hud/infobox.png"
+
+local textBoxBgBorderWidth = 6
+local textBoxBgBorderHeight = 6
+
+local textBoxDefaultTextColor = {1, 1, 1, 1}
+local textBoxHoverTextColor = {1, 1, 0, 1}
+local textBoxActiveTextColor = {0, 1, 0, 1}
+
+local textBoxBgColor = {1, 1, 1, 1}
+local textBoxDisabledBgColor = {0.25, 0.25, 0.25, 1}
+
+local descBoxBgColor = {1, 1, 1, 0.75}
+local descBoxTextColor = {1, 1, 1, 1}
+
+-- END STYLE CONFIG
 
 function textboxClass_tick()
 	for i = 1, #textboxes do
@@ -32,11 +54,10 @@ function textboxClass_tick()
 end
 
 function disableButtonStyle()
-	UiButtonImageBox(textBoxBg, 6, 6, 0.25, 0.25, 0.25, 1)
+	UiButtonImageBox(textBoxBg, textBoxBgBorderWidth, textBoxBgBorderHeight, textBoxDisabledBgColor[1], textBoxDisabledBgColor[2], textBoxDisabledBgColor[3], textBoxDisabledBgColor[4])
 	UiButtonPressColor(1, 1, 1)
 	UiButtonHoverColor(1, 1, 1)
-	UiButtonPressDist(0)
-		
+	UiButtonPressDist(0)	
 end
 
 function textboxClass_render(me)
@@ -45,13 +66,13 @@ function textboxClass_render(me)
 	end
 
 	UiPush()
-		UiFont("regular.ttf", 26)
+		UiFont(font, 26)
 		UiAlign("left middle")
 		
 		local labelString = me.name
 		local nameWidth, nameHeight = UiGetTextSize(labelString)
 		
-		UiButtonImageBox(textBoxBg, 6, 6)
+		UiButtonImageBox(textBoxBg, textBoxBgBorderWidth, textBoxBgBorderHeight, textBoxBgColor[1], textBoxBgColor[2], textBoxBgColor[3], textBoxBgColor[4])
 		
 		UiPush()
 			UiAlign("right middle")
@@ -60,18 +81,18 @@ function textboxClass_render(me)
 		
 		if not me.disabled then
 			if textboxClass_checkMouseInRect(me) and not me.inputActive then
-				UiColor(1,1,0)
+				UiColor(textBoxHoverTextColor[1], textBoxHoverTextColor[2], textBoxHoverTextColor[3], textBoxHoverTextColor[4])
 			elseif me.inputActive then
-				UiColor(0,1,0)
+				UiColor(textBoxActiveTextColor[1], textBoxActiveTextColor[2], textBoxActiveTextColor[3], textBoxActiveTextColor[4])
 			else
-				UiColor(1,1,1)
+				UiColor(textBoxDefaultTextColor[1], textBoxDefaultTextColor[2], textBoxDefaultTextColor[3], textBoxDefaultTextColor[4])
 			end
 		end
 		
 		UiPush()
-			local fontSize = getMaxTextSize(me.value, 26, me.width - 2)
+			local fontSize = getMaxTextSize(me.value, defaultTextSize, me.width - 2)
 			
-			UiFont("regular.ttf", fontSize)
+			UiFont(font, fontSize)
 			
 			local tempVal = me.value
 			
@@ -102,7 +123,7 @@ end
 
 function textboxClass_drawDescriptions()
 	UiPush()
-		UiFont("regular.ttf", 26)
+		UiFont(font, defaultDescriptionTextSize)
 	
 		for i = 1, #textboxes do
 			local currentTextbox = textboxes[i]
@@ -125,12 +146,12 @@ function textboxClass_drawDescriptions()
 					textOffsetX = -10
 				end
 				
-				UiColor(1, 1, 1, 0.75)
+				UiColor(descBoxBgColor[1], descBoxBgColor[2], descBoxBgColor[3], descBoxBgColor[4])
 				UiImageBox(descBoxBg, textWidth + descriptionBoxMargin, textHeight + descriptionBoxMargin, 10, 10)
 				
 				UiTranslate(textOffsetX, 10)
 				
-				UiColor(1, 1, 1, 1)
+				UiColor(descBoxTextColor[1], descBoxTextColor[2], descBoxTextColor[3], descBoxTextColor[4])
 				UiText(currentTextbox.description)
 			end
 		end
@@ -267,13 +288,13 @@ end
 function getMaxTextSize(text, fontSize, maxSize, minFontSize)
 	minFontSize = minFontSize or 1
 	UiPush()
-		UiFont("regular.ttf", fontSize)
+		UiFont(font, fontSize)
 		
 		local currentSize = UiGetTextSize(text)
 		
 		while currentSize > maxSize and fontSize > minFontSize do
 			fontSize = fontSize - 0.1
-			UiFont("regular.ttf", fontSize)
+			UiFont(font, fontSize)
 			currentSize = UiGetTextSize(text)
 		end
 	UiPop()
