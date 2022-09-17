@@ -28,11 +28,11 @@ local descriptionBoxMargin = 20
 local defaultTextSize = 26
 local defaultDescriptionTextSize = 26
 
-local textBoxBg = "MOD/sprites/square.png" -- "ui/common/box-outline-6.png"
-local descBoxBg = "MOD/sprites/square.png" -- "ui/hud/infobox.png"
+local textBoxBg = "ui/common/box-outline-6.png"
+local descBoxBg = "ui/hud/infobox.png"
 
-local textBoxBgBorderWidth = 0
-local textBoxBgBorderHeight = 0
+local textBoxBgBorderWidth = 6
+local textBoxBgBorderHeight = 6
 
 local textBoxDefaultNameTextColor = {1, 1, 1, 1}
 
@@ -40,10 +40,10 @@ local textBoxDefaultTextColor = {1, 1, 1, 1}
 local textBoxHoverTextColor = {1, 1, 0, 1}
 local textBoxActiveTextColor = {0, 1, 0, 1}
 
-local textBoxBgColor = {0, 0, 0, 0.5}
-local textBoxDisabledBgColor = {0, 0, 0, 0.25}
+local textBoxBgColor = {1, 1, 1, 1}
+local textBoxDisabledBgColor = {0.25, 0.25, 0.25, 1}
 
-local descBoxBgColor = {0, 0, 0, 0.75}
+local descBoxBgColor = {1, 1, 1, 0.75}
 local descBoxTextColor = {1, 1, 1, 1}
 
 -- END STYLE CONFIG
