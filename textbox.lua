@@ -28,20 +28,22 @@ local descriptionBoxMargin = 20
 local defaultTextSize = 26
 local defaultDescriptionTextSize = 26
 
-local textBoxBg = "ui/common/box-outline-6.png"
-local descBoxBg = "ui/hud/infobox.png"
+local textBoxBg = "MOD/sprites/square.png" -- "ui/common/box-outline-6.png"
+local descBoxBg = "MOD/sprites/square.png" -- "ui/hud/infobox.png"
 
-local textBoxBgBorderWidth = 6
-local textBoxBgBorderHeight = 6
+local textBoxBgBorderWidth = 0
+local textBoxBgBorderHeight = 0
+
+local textBoxDefaultNameTextColor = {1, 1, 1, 1}
 
 local textBoxDefaultTextColor = {1, 1, 1, 1}
 local textBoxHoverTextColor = {1, 1, 0, 1}
 local textBoxActiveTextColor = {0, 1, 0, 1}
 
-local textBoxBgColor = {1, 1, 1, 1}
-local textBoxDisabledBgColor = {0.25, 0.25, 0.25, 1}
+local textBoxBgColor = {0, 0, 0, 0.5}
+local textBoxDisabledBgColor = {0, 0, 0, 0.25}
 
-local descBoxBgColor = {1, 1, 1, 0.75}
+local descBoxBgColor = {0, 0, 0, 0.75}
 local descBoxTextColor = {1, 1, 1, 1}
 
 -- END STYLE CONFIG
@@ -66,7 +68,7 @@ function textboxClass_render(me)
 	end
 
 	UiPush()
-		UiFont(font, 26)
+		UiFont(font, defaultTextSize)
 		UiAlign("left middle")
 		
 		local labelString = me.name
@@ -76,6 +78,9 @@ function textboxClass_render(me)
 		
 		UiPush()
 			UiAlign("right middle")
+			
+			UiColor(textBoxDefaultNameTextColor[1], textBoxDefaultNameTextColor[2], textBoxDefaultNameTextColor[3], textBoxDefaultNameTextColor[4])
+			
 			UiText(labelString)
 		UiPop()
 		
@@ -96,13 +101,25 @@ function textboxClass_render(me)
 			
 			local tempVal = me.value
 			
+			local textTicker = "  "
+			
+			local tickerTime = math.abs(math.sin(GetTime() * 5))
+			
+			if tickerTime > 0.5 and me.inputActive then
+				textTicker = "I"
+			end
+			
 			if tempVal == "" then
-				tempVal = " "
+				tempVal = textTicker
+			else
+				tempVal = me.value .. textTicker
 			end
 			
 			if me.disabled then
 				disableButtonStyle()
 			end
+			
+			UiButtonPressDist(0)
 			
 			if UiTextButton(tempVal, me.width, me.height) then
 				if not me.disabled then
@@ -156,6 +173,10 @@ function textboxClass_drawDescriptions()
 			end
 		end
 	UiPop()
+end
+
+function textboxClass_getNextId()
+	return #textboxes + 1
 end
 
 function textboxClass_getTextBox(id)
@@ -248,26 +269,28 @@ function textboxClass_setActiveState(me, newState)
 	me.inputActive = newState
 	if not me.inputActive then
 		if me.numbersOnly then
-			if me.value == "" then
-				me.value = me.numberMin .. ""
-			end
-			
-			if me.limitsActive then
-				local tempVal = tonumber(me.value)
-				
-				if tempVal == nil then
-					me.value = me.numberMin .. ""
-				elseif tempVal < me.numberMin then
-					me.value = me.numberMin .. ""
-				elseif tempVal > me.numberMax then
-					me.value = me.numberMax .. ""
-				end
-			end
+			textboxClass_checkValidNumber(me)
 		end
 		
 		if me.lastInputActive and me.onInputFinished ~= nil then
 			me.onInputFinished(me.value)
 		end
+	end
+end
+
+function textboxClass_checkValidNumber(me)
+	if me.value == nil or me.value == "" or tonumber(me.value) == nil then
+		me.value = me.numberMin .. ""
+	end
+	
+	local tempVal = tonumber(me.value)
+	
+	if tempVal == nil then
+		me.value = me.numberMin .. ""
+	elseif tempVal < me.numberMin and me.limitsActive then
+		me.value = me.numberMin .. ""
+	elseif tempVal > me.numberMax and me.limitsActive then
+		me.value = me.numberMax .. ""
 	end
 end
 
@@ -299,4 +322,29 @@ function getMaxTextSize(text, fontSize, maxSize, minFontSize)
 		end
 	UiPop()
 	return fontSize, fontSize > minFontSize
+end
+
+function textboxClass_setTextFont(newFont, newFontSize)
+	font = newFont
+	defaultTextSize = newFontSize
+end
+
+function textboxClass_setTextColor(defaultNameTextColor, defaultTextColor, hoverTextColor, activeTextColor)
+	textBoxDefaultNameTextColor = defaultNameTextColor or {1, 1, 1, 1}
+	textBoxDefaultTextColor = defaultTextColor or {1, 1, 1, 1}
+	textBoxHoverTextColor = hoverTextColor or {1, 1, 0, 1}
+	textBoxActiveTextColor = activeTextColor or {0, 1, 0, 1}
+end
+
+function textboxClass_setTextBoxBg(bg, borderWidth, borderHeight, color, disabledColor)
+	textBoxBg = bg or "ui/common/box-outline-6.png"
+	textBoxBgBorderWidth = borderWidth or 6
+	textBoxBgBorderHeight = borderHeight or 6
+	textBoxBgColor = color or {1, 1, 1, 1}
+	textBoxDisabledBgColor = disabledColor or {0.25, 0.25, 0.25, 1}
+end
+
+function textboxClass_setDescBoxBg(bg, color)
+	descBoxBg = bg or "ui/hud/infobox.png"
+	descBoxBgColor = color or {1, 1, 1, 0.75}
 end
